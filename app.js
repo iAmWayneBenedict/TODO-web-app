@@ -1,6 +1,9 @@
 const express = require('express');
 const path = require('path');
+const bodyParser = require('body-parser');
 const app = express();
+
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.listen(8888, '127.0.0.1');
 
@@ -12,8 +15,6 @@ app.get('/', (req, res) => {
     const blog = "blogs";
     res.render('index', { blog });
 })
-
-// app.post('/', (req, res) => {
-//     // res.render('index', {result: req.body})
-//     console.log(req.body)
-// })
+app.post('/', (req, res) => {
+    console.log(req.body)
+})

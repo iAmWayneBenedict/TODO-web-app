@@ -1,10 +1,8 @@
-// const request = require('request');
+
 const form = document.querySelector('form');
 const resultContainer = document.querySelector('.result');
-const deleteBtns = document.querySelectorAll('.delete');
-const doneBtns = document.querySelectorAll('.done');
 
-const serialize = (formElement) => {
+const serialize = formElement => {
     let data = new FormData(formElement);
 
     let obj = {};
@@ -14,17 +12,26 @@ const serialize = (formElement) => {
     return obj;
 }
 
-const formSubmit = (event) => {
-    event.preventDefault();
-    let data = serialize(form);
+const formSubmit = event => {
+    // event.preventDefault();
+    // let data = serialize(event.target);
+    // if (data.text === '') return;
+    //
+    // let li = document.createElement('li');
+    // li.className = "shadow relative py-5 px-4 my-2";
+    //
+    // let p = document.createElement('p');
+    // p.innerText = data.text;
+    //
+    // let div = initializeElements();
+    // li.append(p);
+    // li.append(div);
+    //
+    // resultContainer.append(li);
+    // event.target.reset();
+}
 
-    console.log(data)
-    let li = document.createElement('li');
-    li.className = "shadow relative py-5 px-4 my-2";
-
-    let p = document.createElement('p');
-    p.innerText = data.text;
-
+const initializeElements = _ => {
     let div = document.createElement('div');
     let iDelete = document.createElement('button');
     let iFinish = document.createElement('button');
@@ -38,19 +45,15 @@ const formSubmit = (event) => {
     div.append(iFinish);
     div.append(iDelete);
 
-    li.append(p);
-    li.append(div);
-
-    resultContainer.append(li);
-    event.target.reset();
+    return div;
 }
 
-const deleteAction = (e) => {
+const deleteAction = e => {
     let parent = e.target.parentElement.parentElement;
     parent.remove();
 }
 
-const doneAction = (e) => {
+const doneAction = e => {
     let prev = e.target.parentElement.previousElementSibling;
     prev.innerHTML = prev.innerText.strike().italics();
     e.target.setAttribute('disabled', 'true');
