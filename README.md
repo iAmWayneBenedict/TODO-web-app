@@ -1,2 +1,2 @@
 # TODO-web-app
-TODO web app using Tailwindcss, Node.js, Express.js, MongoDB, and Pug.js
+A simple TODO web app using Tailwindcss, Node.js, Express.js, MongoDB, and Pug.js
