@@ -1,10 +1,9 @@
-// const request = require('request');
-const form = document.querySelector('form');
-const resultContainer = document.querySelector('.result');
-const deleteBtns = document.querySelectorAll('.delete');
-const doneBtns = document.querySelectorAll('.done');
 
-const serialize = (formElement) => {
+const a = document.querySelectorAll('.delete');
+const b = document.querySelectorAll('.done');
+const c = document.querySelectorAll('.done-text');
+
+const serialize = formElement => {
     let data = new FormData(formElement);
 
     let obj = {};
@@ -14,20 +13,27 @@ const serialize = (formElement) => {
     return obj;
 }
 
-const formSubmit = (event) => {
-    event.preventDefault();
-    let data = serialize(form);
+const formSubmit = data => {
+    // event.preventDefault();
+    // if (data.text === '') return;
+    //
+    // let li = document.createElement('li');
+    // li.className = "shadow relative py-5 px-4 my-2";
+    //
+    // let p = document.createElement('p');
+    // p.innerText = data.text;
+    //
+    // let div = initializeElements();
+    // li.append(p);
+    // li.append(div);
+    //
+    // resultContainer.append(li);
+}
 
-    console.log(data)
-    let li = document.createElement('li');
-    li.className = "shadow relative py-5 px-4 my-2";
-
-    let p = document.createElement('p');
-    p.innerText = data.text;
-
+const initializeElements = _ => {
     let div = document.createElement('div');
-    let iDelete = document.createElement('button');
-    let iFinish = document.createElement('button');
+    let iDelete = document.createElement('a');
+    let iFinish = document.createElement('a');
     div.className = 'absolute top-1/2 right-5 transform -translate-y-1/2';
     iDelete.className = 'delete text-red-400 font-semibold px-1 ml-1';
     iFinish.className = 'done text-green-400 font-semibold px-1 ml-1';
@@ -38,23 +44,56 @@ const formSubmit = (event) => {
     div.append(iFinish);
     div.append(iDelete);
 
-    li.append(p);
-    li.append(div);
-
-    resultContainer.append(li);
-    event.target.reset();
+    return div;
 }
 
-const deleteAction = (e) => {
+const deleteAction = e => {
     let parent = e.target.parentElement.parentElement;
-    parent.remove();
+    const endpoint  = `/todo/${e.target.dataset.doc}`;
+
+    fetch(endpoint, {
+        method: 'DELETE'
+    })
+        .then( response => {
+            response.json().then( data => {
+                location.href = data.redirect
+            })
+        })
+        .catch( err => console.log(err))
+    // parent.remove();
 }
 
-const doneAction = (e) => {
-    let prev = e.target.parentElement.previousElementSibling;
-    prev.innerHTML = prev.innerText.strike().italics();
-    e.target.setAttribute('disabled', 'true');
-    e.target.classList.add('disabled:opacity-50')
+const doneAction = e => {
+    const endpoint  = `/todo/${e.target.dataset.doc}`;
+    console.log(endpoint)
+    fetch(endpoint, {
+        method: 'PUT',
+    })
+        .then( response => {
+            response.json().then( data => {
+                location.href = data.redirect
+            })
+            console.log(response)
+        })
+        .catch( err => console.log(err))
 }
 
-form.addEventListener('submit', formSubmit);
+const onDocumentLoad = e => {
+    e.innerHTML = e.innerText.strike().italics();
+    e.setAttribute('disabled', 'true');
+    e.classList.add('disabled:opacity-50')
+}
+
+// form.addEventListener('submit', formSubmit);
+a.forEach(element => {
+    element.addEventListener('click', deleteAction);
+})
+b.forEach(element => {
+    element.addEventListener('click', doneAction);
+})
+
+window.onload = _ => {
+    c.forEach(element => {
+        onDocumentLoad(element)
+    })
+}
