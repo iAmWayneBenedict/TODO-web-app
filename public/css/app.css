@@ -644,10 +644,6 @@ video {
   display: flex;
 }
 
-.hidden {
-  display: none;
-}
-
 .w-96 {
   width: 24rem;
 }
@@ -659,6 +655,10 @@ video {
 
 .transform {
   transform: var(--tw-transform);
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .flex-col {
@@ -747,4 +747,3 @@ video {
 .disabled\:opacity-50:disabled {
   opacity: 0.5;
 }
-

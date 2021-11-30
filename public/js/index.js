@@ -1,6 +1,7 @@
 
-const form = document.querySelector('form');
-const resultContainer = document.querySelector('.result');
+const a = document.querySelectorAll('.delete');
+const b = document.querySelectorAll('.done');
+const c = document.querySelectorAll('.done-text');
 
 const serialize = formElement => {
     let data = new FormData(formElement);
@@ -12,9 +13,8 @@ const serialize = formElement => {
     return obj;
 }
 
-const formSubmit = event => {
+const formSubmit = data => {
     // event.preventDefault();
-    // let data = serialize(event.target);
     // if (data.text === '') return;
     //
     // let li = document.createElement('li');
@@ -28,13 +28,12 @@ const formSubmit = event => {
     // li.append(div);
     //
     // resultContainer.append(li);
-    // event.target.reset();
 }
 
 const initializeElements = _ => {
     let div = document.createElement('div');
-    let iDelete = document.createElement('button');
-    let iFinish = document.createElement('button');
+    let iDelete = document.createElement('a');
+    let iFinish = document.createElement('a');
     div.className = 'absolute top-1/2 right-5 transform -translate-y-1/2';
     iDelete.className = 'delete text-red-400 font-semibold px-1 ml-1';
     iFinish.className = 'done text-green-400 font-semibold px-1 ml-1';
@@ -50,14 +49,51 @@ const initializeElements = _ => {
 
 const deleteAction = e => {
     let parent = e.target.parentElement.parentElement;
-    parent.remove();
+    const endpoint  = `/todo/${e.target.dataset.doc}`;
+
+    fetch(endpoint, {
+        method: 'DELETE'
+    })
+        .then( response => {
+            response.json().then( data => {
+                location.href = data.redirect
+            })
+        })
+        .catch( err => console.log(err))
+    // parent.remove();
 }
 
 const doneAction = e => {
-    let prev = e.target.parentElement.previousElementSibling;
-    prev.innerHTML = prev.innerText.strike().italics();
-    e.target.setAttribute('disabled', 'true');
-    e.target.classList.add('disabled:opacity-50')
+    const endpoint  = `/todo/${e.target.dataset.doc}`;
+    console.log(endpoint)
+    fetch(endpoint, {
+        method: 'PUT',
+    })
+        .then( response => {
+            response.json().then( data => {
+                location.href = data.redirect
+            })
+            console.log(response)
+        })
+        .catch( err => console.log(err))
 }
 
-form.addEventListener('submit', formSubmit);
+const onDocumentLoad = e => {
+    e.innerHTML = e.innerText.strike().italics();
+    e.setAttribute('disabled', 'true');
+    e.classList.add('disabled:opacity-50')
+}
+
+// form.addEventListener('submit', formSubmit);
+a.forEach(element => {
+    element.addEventListener('click', deleteAction);
+})
+b.forEach(element => {
+    element.addEventListener('click', doneAction);
+})
+
+window.onload = _ => {
+    c.forEach(element => {
+        onDocumentLoad(element)
+    })
+}

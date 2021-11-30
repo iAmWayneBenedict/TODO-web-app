@@ -42,21 +42,27 @@ html(lang="en")
             style="width: 34rem !important",
             class="flex flex-col mt-5"
         )
-            li(
-                class="shadow relative py-5 px-4 my-2"
-                hidden="true"
-            )
-                p text
-                div(
-                    class="absolute top-1/2 right-5 transform -translate-y-1/2"
-                )
-                    button(
-                        class="disabled:opacity-50 text-green-400 font-semibold px-1 ml-1"
-                    ) Done
+                if typeof todo !== 'undefined'
+                    each item in todo
+                        - let done = item.done ? "done-text" : "";
+                        li(
+                            class="shadow relative py-5 px-4 my-2"
+                        )
+                            p(
+                                class="" + done
+                            )=item.text
+                            div(
+                                class="absolute top-1/2 right-5 transform -translate-y-1/2"
+                            )
+                                a(
+                                    data-doc=item._id,
+                                    class="done disabled:opacity-50 text-green-400 font-semibold cursor-pointer px-1 ml-1"
+                                ) Done
 
-                    button(
-                        class="text-red-400 font-semibold px-1 ml-1"
-                    ) Delete
+                                a(
+                                    data-doc=item._id,
+                                    class="delete text-red-400 font-semibold cursor-pointer px-1 ml-1"
+                                ) Delete
         script(
             src="js/index.js"
         )
