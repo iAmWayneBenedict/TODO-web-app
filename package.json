@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "public/js/index.js",
+  "engine": {
+    "node": "16.x"
+  },
   "scripts": {
+    "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "tailwind": "npx tailwindcss -i public/css/styles.css -o public/css/app.css --watch"
   },
